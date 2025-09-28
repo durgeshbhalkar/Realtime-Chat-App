@@ -10,17 +10,16 @@ export const singup =async (req,res)=>{
         return res.status(400).json({message:"All fields are required"});
     }
     if (password.length < 6) {
-        return res.status(400)({message:"Password must be at least 6 charachter"});
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
     }
     // check if emails valids regex
     const emailregex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailregex.test(email)) {
-        return res.status(400)({message:"Invalid Email format"});
+        return res.status(400).json({ message: "Invalid email format" });
     }
-    const user =await User.findOne({email});
-    if(user)return res.status(400)({message:"Email already exists"});
-    // password hashing 1234=> $Dkjdydg-@?
+    const user = await User.findOne({ email });
+    if (user) return res.status(400).json({ message: "Email already exists" });    // password hashing 1234=> $Dkjdydg-@?
     const salt = await bcrypt.genSalt(10)
     const hashpassword =await bcrypt.hash(password,salt);
     const newUser=new User({
@@ -30,9 +29,9 @@ export const singup =async (req,res)=>{
     });
 
     if (newUser) {
-        genrateToken(newUser._id,res);
-        await newUser.save();
-
+        const saveUser=await newUser.save();
+        genrateToken(saveUser._id,res);
+       
         res.status(201).json({
         _id: newUser._id,
         fullname: newUser.fullname,

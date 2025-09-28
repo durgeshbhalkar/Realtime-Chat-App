@@ -7,7 +7,7 @@
     });
 
     res.cookie("jwt",token,{
-        maxAge:7*24*60*60*1000, //mili second
+        maxAge:7*24*60*1000, //mili second
         httpOnly: true, //prevent XSS attacks : cross-site scripting
         sameSite:"strict", //csrf attacts
         secure: process.env.NODE_ENV ==="development" ? false : true,
