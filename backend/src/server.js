@@ -6,12 +6,15 @@ import path from "path";
 
 import authRoutes from "./routes/auth.route.js"
 import massageRoutes from "./routes/massage.route.js";
+import { connectDB } from "./lib/db.js";
 
 dotenv.config();
 const app=express();
 const __dirname = path.resolve();
 
 const PORT=process.env.PORT || 3000;
+
+app.use(express.json());//req.body
 
 app.use("/api/auth", authRoutes);
 app.use("/api/massages", massageRoutes);
@@ -26,4 +29,7 @@ if(process.env.NODE_ENV === "production"){
     });
 }
 
-app.listen(3000, ()=> console.log("Server is runing on poart no 3000 555 " + PORT));
+app.listen(3000, ()=> {
+  console.log("Server Start on PORT: "+ PORT)
+  connectDB(); 
+});
